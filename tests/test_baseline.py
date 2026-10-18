@@ -6,6 +6,7 @@ runs from a fresh clone. Add your own tests as you fix issues.
 
 import unittest
 
+from src.algorithms import first_unique_index
 from src.issue_service import IssueNotFound, IssueService
 from src.validators import ValidationError
 
@@ -24,6 +25,8 @@ class MemoryStorage:
 
 
 class TestBaseline(unittest.TestCase):
+    def test_first_unique_index_is_case_sensitive(self):
+        self.assertEqual(first_unique_index("AabbcC"), 0)
     def setUp(self):
         self.service = IssueService(MemoryStorage())
 
