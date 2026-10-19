@@ -6,7 +6,7 @@ runs from a fresh clone. Add your own tests as you fix issues.
 
 import unittest
 
-from src.algorithms import first_unique_index
+from src.algorithms import first_unique_index, merge_intervals  
 from src.issue_service import IssueNotFound, IssueService
 from src.validators import ValidationError
 
@@ -29,6 +29,38 @@ class TestBaseline(unittest.TestCase):
         self.assertEqual(first_unique_index("AabbcC"), 0)
     def setUp(self):
         self.service = IssueService(MemoryStorage())
+
+    def test_merge_intervals_unsorted(self):
+        self.assertEqual(
+        merge_intervals([[8, 10], [1, 3], [2, 6]]),
+        [[1, 6], [8, 10]]
+    )
+
+    def test_merge_intervals_touching_endpoints(self):
+        self.assertEqual(
+        merge_intervals([[1, 2], [2, 3]]),
+        [[1, 3]]
+    )
+
+    def test_merge_intervals_negative_numbers(self):
+        self.assertEqual(
+        merge_intervals([[-5, -1], [-3, 2]]),
+        [[-5, 2]]
+    )
+    def test_merge_intervals_zero_length(self):
+        self.assertEqual(
+        merge_intervals([[1, 1], [1, 2], [4, 4]]),
+        [[1, 2], [4, 4]]
+    )
+
+    def test_merge_intervals_duplicates(self):
+        self.assertEqual(
+        merge_intervals([[1, 3], [1, 3], [2, 4]]),
+        [[1, 4]]
+    )
+
+    def test_merge_intervals_empty_input(self):
+        self.assertEqual(merge_intervals([]), [])
 
     def test_create_assigns_id_and_defaults(self):
         issue = self.service.create({"title": "First bug"})
