@@ -58,6 +58,26 @@ class TestBaseline(unittest.TestCase):
         merge_intervals([[1, 3], [1, 3], [2, 4]]),
         [[1, 4]]
     )
+    
+    def test_update_status_preserves_other_fields(self):
+        issue = self.service.create({
+        "title": "Login bug",
+        "priority": "high",
+    })
+
+        updated = self.service.update(
+            issue["id"], {"status": "closed"}
+    )
+
+        self.assertEqual(updated["status"], "closed")
+        self.assertEqual(updated["title"], "Login bug")
+        self.assertEqual(updated["priority"], "high")
+
+    def test_update_invalid_status_rejected(self):
+        issue = self.service.create({"title": "Login bug"})
+
+        with self.assertRaises(ValueError):
+            self.service.update(issue["id"], {"status": "invalid-status"})
 
     def test_merge_intervals_empty_input(self):
         self.assertEqual(merge_intervals([]), [])
